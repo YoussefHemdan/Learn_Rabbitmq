@@ -122,6 +122,7 @@ namespace BillService.Controllers
         [HttpPost("dd")]
         public IActionResult PublishOrder([FromBody] OrderDto order)
         {
+            
             // Publish the order to the message bus (RabbitMQ).
             _messageConsumer.Publish(order);
 
