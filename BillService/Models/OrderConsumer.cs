@@ -1,10 +1,11 @@
 ﻿using BillService.Data;
 using MassTransit;
 using Newtonsoft.Json;
+using SharedModels;
 
 namespace BillService.Models
 {
-    public class OrderConsumer : IConsumer<OrderDto>
+    public class OrderConsumer : IConsumer<OrderMsg>
     {
         private readonly AppDbContext db;
 
@@ -12,13 +13,13 @@ namespace BillService.Models
         {
             this.db = db;
         }
-        public List<OrderDto> orderDtos { get; set; } 
+     
        
-        public async Task Consume(ConsumeContext<OrderDto> context )
+        public Task Consume(ConsumeContext<OrderMsg> context )
         {
             var jsonMessage = JsonConvert.SerializeObject(context.Message);
 
-            var order = JsonConvert.DeserializeObject<OrderDto>(jsonMessage);
+            var order = JsonConvert.DeserializeObject<OrderMsg>(jsonMessage);
 
 
             db.Bills.Add(new()
@@ -27,18 +28,18 @@ namespace BillService.Models
                 OrderId = order.Id
             });
             db.SaveChanges();
-            
+            return Task.CompletedTask;
         }
 
 
-        public async Task<List<OrderDto>>? ShowList()
-        {
-            if (orderDtos.Count != 0)
-            {
-                return orderDtos;
-            }
-            return null;
-        }
+        //public async Task<List<OrderDto>>? ShowList()
+        //{
+        //    if (orderDtos.Count != 0)
+        //    {
+        //        return orderDtos;
+        //    }
+        //    return null;
+        //}
       
         
     }

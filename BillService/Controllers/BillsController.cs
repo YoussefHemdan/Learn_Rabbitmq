@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BillService.Data;
 using BillService.Models;
 using MassTransit;
+using SharedModels;
 
 namespace BillService.Controllers
 {
@@ -120,7 +121,7 @@ namespace BillService.Controllers
         }
 
         [HttpPost("dd")]
-        public IActionResult PublishOrder([FromBody] OrderDto order)
+        public IActionResult PublishOrder([FromBody] OrderMsg order)
         {
             
             // Publish the order to the message bus (RabbitMQ).

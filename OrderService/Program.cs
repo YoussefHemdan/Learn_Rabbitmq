@@ -43,6 +43,8 @@ namespace OrderService
 
 
             //builder.Services.AddMassTransitHostedService();
+            // Register hosted service using the interface type IHostedService to start/stop the bus with the application
+            builder.Services.AddSingleton<IHostedService, BusService>();
 
             var app = builder.Build();
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Data;
 using OrderService.Models;
+using SharedModels;
 
 namespace OrderService.Controllers
 {
@@ -17,7 +18,7 @@ namespace OrderService.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IPublishEndpoint _iPublishEndpoint;
-
+        private readonly IBusControl _messageConsumer;
         public OrdersController(AppDbContext context , IPublishEndpoint publishEndpoint)
         {
             _context = context;
@@ -95,8 +96,13 @@ namespace OrderService.Controllers
           }
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            _iPublishEndpoint.Publish<Order>(order);
-
+            var msg = new OrderMsg
+            {
+                Id = order.Id,
+                Name = order.Name,
+                price = order.price
+            };
+            await _iPublishEndpoint.Publish<Order>(msg);
             return Ok();
         }
 

@@ -45,6 +45,7 @@ namespace BillService
                  
                 });
             });
+            builder.Services.AddHostedService<BusService>();
             //builder.Services.AddMassTransitHostedService<>();
             //builder.Services.AddSingleton<IConsumer, OrderConsumer>();
 
